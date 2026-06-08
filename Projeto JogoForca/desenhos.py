@@ -7,7 +7,7 @@ def imprimir_palavra_secreta(palavra, acertos):
             adivinha += '\u2588'
     print(f'ADVINHE: ({len(palavra)} letras): ')
     for letra in adivinha:
-        print(f'{letra} ', end='')
+        print(f'{letra}', end='')
     print()
 
     return adivinha
@@ -15,6 +15,7 @@ def imprimir_palavra_secreta(palavra, acertos):
 # Desenho da forca
 
 def imprimir_forca(erros):
+    score = 1000
     print('X==:==')
     print('X  :  ')
     if erros >= 1:
@@ -38,4 +39,7 @@ def imprimir_forca(erros):
         linha3 += ' / \ '
     print(f'X{linha3}')
 
+    score -= erros * 120
     print(f'X\n======')
+
+    return score

@@ -1,52 +1,43 @@
-import desenhos as d
-from random import choice
-import os
+import jogo as jogo_forca
+import bd
 
-caminho = os.path.join(os.path.dirname(__file__), 'palavras.txt')
-
-
-lista_palavras = list()
-arquivo = open(caminho, 'r')
-for linha in arquivo:
-    linha = linha.strip()
-    lista_palavras.append(linha)
-
-arquivo.close()
-
-palavra_sorteada = choice(lista_palavras)
-
-
-digitadas = []
-acertos = []
-erros = 0
+def mostrar_menu():
+    print("="*30)
+    print(" " * 7 + "JOGO DA FORCA")
+    print("="*30)
+    print("\n 1 - Jogar")
+    print(" 2 - Score")
+    print(" 3 - Sair \n")
+    print("="*30)
 
 while True:
-    adivinha = d.imprimir_palavra_secreta(palavra_sorteada, acertos)
+    conn = bd.conectar()
+    bd.criar_tabela(conn)
 
-    # * CONDIÇÃO DE VITORIA
-    if adivinha == palavra_sorteada:
-        print('Você acertou!')
-        break
+    mostrar_menu()
+    opcao = int(input("Escolha uma opção (1-3): "))
+    if opcao == 1:
+        print("Iniciando o jogo...")
+        jogo_forca.iniciar_jogo()
+        input("Pressione Enter para voltar ao menu...")
 
-    # * TENTATIVAS
-    tentativa = input('\n Digite uma letra: ').lower().strip()
-    if tentativa in digitadas:
-        print('Voce já usou essa letra!')
-        continue
-    else:
-        digitadas += tentativa
-        if tentativa in palavra_sorteada:
-            acertos += tentativa
+    elif opcao == 2:
+        print("SCORE:")
+        dados = bd.listar_dados()
+        if not dados:
+            print('Score Vazio.')
         else:
-            erros += 1
-            print('Você errou!')
-    
-    # Desenhando a forca
-    d.imprimir_forca(erros)
+            i = 1
+            for jogador in dados:
+                print(f'{i} - > {jogador[1]}, Pontuacao: {jogador[2]}')
+                i += 1
+        input('Digite qualquer tecla para continuar.')
 
-
-    #CONDIÇÃO DE FIM DE JOGO
-    if erros == 6:
-        print('Enforcado!!')
-        print(f'A palavra era {palavra_sorteada}')
+    elif opcao == 3:
+        print("Saindo do jogo...")
         break
+    else:
+        print("Opção inválida. Tente novamente.")
+
+
+bd.desconectar(conn)
