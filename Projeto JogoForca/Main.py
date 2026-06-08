@@ -1,19 +1,30 @@
 import desenhos as d
+from random import choice
+import os
 
-palavra = input('Digite uma palavra secreta: ').lower().strip()
+caminho = os.path.join(os.path.dirname(__file__), 'palavras.txt')
 
-for x in range(50):
-    print()
+
+lista_palavras = list()
+arquivo = open(caminho, 'r')
+for linha in arquivo:
+    linha = linha.strip()
+    lista_palavras.append(linha)
+
+arquivo.close()
+
+palavra_sorteada = choice(lista_palavras)
+
 
 digitadas = []
 acertos = []
 erros = 0
 
 while True:
-    adivinha = d.imprimir_palavra_secreta(palavra, acertos)
+    adivinha = d.imprimir_palavra_secreta(palavra_sorteada, acertos)
 
     # * CONDIÇÃO DE VITORIA
-    if adivinha == palavra:
+    if adivinha == palavra_sorteada:
         print('Você acertou!')
         break
 
@@ -24,7 +35,7 @@ while True:
         continue
     else:
         digitadas += tentativa
-        if tentativa in palavra:
+        if tentativa in palavra_sorteada:
             acertos += tentativa
         else:
             erros += 1
@@ -37,5 +48,5 @@ while True:
     #CONDIÇÃO DE FIM DE JOGO
     if erros == 6:
         print('Enforcado!!')
-        print(f'A palavra era {palavra}')
+        print(f'A palavra era {palavra_sorteada}')
         break
